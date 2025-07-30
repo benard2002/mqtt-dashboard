@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Title</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                Dash<span>board</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="" class="nav-link">SLIDES</a></li>
+                <li class="nav-item"><a href="" class="nav-link">ABOUT</a></li>
+            </ul>
+            <span class="material-symbols-outlined hamburger">menu</span>
+
+            <div class="mobile-menu">
+                <div class="mobile-nav">
+                    <div class="sensor-btn">Sensor A</div>
+                    <div class="sensor-btn">Sensor B</div>
+                    <div class="sensor-btn">Sensor C</div>
+                    <div class="sensor-btn">Sensor D</div>
+                    <div class="sensor-btn">Sensor E</div>
+                    <div class="mobile-nav-links">
+                        <a href="" class="nav-link">SLIDES</a>
+                        <a href="" class="nav-link">ABOUT</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container">
+        <aside class="sensor-nav">
+            <div class="sensor-btn">Sensor A</div>
+            <div class="sensor-btn">Sensor B</div>
+            <div class="sensor-btn">Sensor C</div>
+            <div class="sensor-btn">Sensor D</div>
+            <div class="sensor-btn">Sensor E</div>
+            
+        </aside>
+        <main>
+            <div class="main-contents">
+                <div class="sensor-title title">Temperature Sensor</div>
+                <section class="cards-section">
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+                </section>
+
+                <div class="title">CHART</div>
+                <section class="chart-section">
+                    <canvas id="sensorChart"></canvas>
+                </section>
+            </div>
+        </main>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
