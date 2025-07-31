@@ -1,0 +1,259 @@
+//
+// // get sensor name
+// let sensor_name = "Select a sensor"
+// let sensorTitle = document.querySelector(".sensor-title")
+//
+// function updateDashboard(){
+//     sensorTitle.textContent = sensor_name
+// }
+//
+// const sensors = document.querySelectorAll('.sensor-btn')
+// sensors.forEach(n=>{
+//     n.addEventListener('click',()=>{
+//         sensor_name = n.textContent
+//         updateDashboard()
+//     })
+//
+// })
+//
+//
+//
+// // control responsiveness
+// const hamburger = document.querySelector('.hamburger');
+// const mobileMenu = document.querySelector('.mobile-menu');
+//
+// hamburger.addEventListener('click', () => {
+//     mobileMenu.classList.toggle('active');
+// });
+//
+//
+// document.querySelectorAll('.mobile-menu a, .mobile-menu .sensor-btn').forEach(item => {
+//     item.addEventListener('click', () => {
+//         mobileMenu.classList.remove('active');
+//     });
+// });
+
+
+
+
+
+
+// // ============ SELECT DOM ELEMENTS ============
+// let sensor_name = "Select a sensor";
+// const sensorTitle = document.querySelector(".sensor-title");
+// const cardsSection = document.querySelector(".cards-section");
+// const ctx = document.getElementById("sensorChart").getContext("2d");
+
+// let sensorChart; // Chart.js instance
+
+// // ============ FETCH & UPDATE FUNCTIONS ============
+
+// // Generate card HTML for each parameter
+// function createCardHTML(label, value) {
+//     return `
+//         <div class="card">
+//             <div class="icon-circle">${label.charAt(0).toUpperCase()}</div>
+//             <div class="label">${label.toUpperCase()}</div>
+//             <div class="value">${value}<span>${getUnit(label)}</span></div>
+//             <div class="subtext">current ${label}</div>
+//         </div>
+//     `;
+// }
+
+// // Optional: assign units to parameters
+// function getUnit(param) {
+//     const units = {
+//         temperature: "°C",
+//         voltage: "V",
+//         frequency: "Hz",
+//         current: "A",
+//         humidity: "%",
+//         light: "lx",
+//         pressure: "hPa",
+//         altitude: "m",
+//         gas: "ppm",
+//         smoke: "%",
+//         co2: "ppm"
+//     };
+//     return units[param.toLowerCase()] || "";
+// }
+
+// // Fetch sensor data from backend
+// async function fetchSensorData(sensorID) {
+//     try {
+//         const response = await fetch(`http://localhost:3000/api/sensor/${sensorID}`);
+//         const data = await response.json();
+//         updateDashboard(data);
+//     } catch (err) {
+//         console.error("Failed to fetch sensor data:", err);
+//     }
+// }
+
+// ============ UPDATE UI ============
+
+// function updateDashboard(data) {
+//     // 1. Update title
+//     sensor_name = data.name;
+//     sensorTitle.textContent = sensor_name;
+
+//     // 2. Update cards
+//     cardsSection.innerHTML = ""; // Clear previous
+//     for (const [param, value] of Object.entries(data.parameters)) {
+//         cardsSection.innerHTML += createCardHTML(param, value);
+//     }
+
+//     // 3. Update chart
+//     updateChart(data.history);
+// }
+
+// // ============ UPDATE CHART ============
+
+// function updateChart(historyData) {
+//     const labels = historyData.labels;
+//     const datasets = Object.entries(historyData)
+//         .filter(([key]) => key !== "labels")
+//         .map(([param, values], idx) => ({
+//             label: param.toUpperCase(),
+//             data: values,
+//             borderColor: getColor(idx),
+//             backgroundColor: "transparent",
+//             borderWidth: 2,
+//             tension: 0.3
+//         }));
+
+//     if (sensorChart) {
+//         sensorChart.data.labels = labels;
+//         sensorChart.data.datasets = datasets;
+//         sensorChart.update();
+//     } else {
+//         sensorChart = new Chart(ctx, {
+//             type: "line",
+//             data: {
+//                 labels,
+//                 datasets
+//             },
+//             options: {
+//                 responsive: true,
+//                 plugins: {
+//                     legend: {
+//                         position: "top"
+//                     },
+//                     title: {
+//                         display: true,
+//                         text: "Sensor Parameter History"
+//                     }
+//                 }
+//             }
+//         });
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.HTML
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Title</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                Dash<span>board</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="" class="nav-link">SLIDES</a></li>
+                <li class="nav-item"><a href="" class="nav-link">ABOUT</a></li>
+            </ul>
+            <span class="material-symbols-outlined hamburger">menu</span>
+
+            <div class="mobile-menu">
+                <div class="mobile-nav">
+                    <div class="sensor-btn">Sensor A</div>
+                    <div class="sensor-btn">Sensor B</div>
+                    <div class="sensor-btn">Sensor C</div>
+                    <div class="sensor-btn">Sensor D</div>
+                    <div class="sensor-btn">Sensor E</div>
+                    <div class="mobile-nav-links">
+                        <a href="" class="nav-link">SLIDES</a>
+                        <a href="" class="nav-link">ABOUT</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container">
+        <aside class="sensor-nav">
+            <div class="sensor-btn">Sensor A</div>
+            <div class="sensor-btn">Sensor B</div>
+            <div class="sensor-btn">Sensor C</div>
+            <div class="sensor-btn">Sensor D</div>
+            <div class="sensor-btn">Sensor E</div>
+            
+        </aside>
+        <main>
+            <div class="main-contents">
+                <div class="sensor-title title">Temperature Sensor</div>
+                <section class="cards-section">
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="icon-circle">°C</div>
+                        <div class="label">TEMPERATURE</div>
+                        <div class="value">72<span>°C</span></div>
+                        <div class="subtext">current temperature</div>
+                    </div>
+
+                </section>
+
+                <div class="title">CHART</div>
+
+
+                <section class="chart-section" id="chartContainer">
+                    <!-- Individual charts will be injected here -->
+                </section>
+            </div>
+        </main>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
