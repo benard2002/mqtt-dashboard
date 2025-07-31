@@ -12,7 +12,10 @@ document.querySelectorAll(".mobile-menu a, .mobile-menu .sensor-btn").forEach(it
   });
 });
 
-const socket = new WebSocket(`wss://${window.location.host}`);
+// WebSocket secure connection (handles local & HTTPS production)
+const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+const socket = new WebSocket(`${protocol}://${window.location.host}`);
+
 let currentSensor = "A";
 let chart;
 let chartData = {};
@@ -42,7 +45,8 @@ function getColorForVariable(variable) {
   }
 
   const fallbackColors = [
-    "#3f51b5", "#009688", "#e91e63", "#795548", "#607d8b", "#00bcd4", "#8bc34a"
+    "#3f51b5", "#009688", "#e91e63", "#795548",
+    "#607d8b", "#00bcd4", "#8bc34a"
   ];
   for (let color of fallbackColors) {
     if (!usedColors.has(color)) {
@@ -54,7 +58,22 @@ function getColorForVariable(variable) {
   return "#000000";
 }
 
-// Highlight the selected sensor in sidebar and mobile nav
+// Sensor switch logic
+sensorButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const selected = btn.textContent.trim().split(" ")[1];
+    if (selected === currentSensor) return;
+
+    currentSensor = selected;
+    sensorTitle.textContent = `Sensor ${selected}`;
+    highlightSelectedSensor();
+    resetChart();
+
+    showWaitingStatus();
+  });
+});
+
+// Highlight selected button
 function highlightSelectedSensor() {
   sensorButtons.forEach(btn => {
     const sensor = btn.textContent.trim().split(" ")[1];
@@ -62,13 +81,14 @@ function highlightSelectedSensor() {
   });
 }
 
-// Clear and recreate chart
+// Reset and recreate chart
 function resetChart() {
   chartData = {};
   chartLabels = [];
   usedColors.clear();
 
   if (chart) chart.destroy();
+
   chartContainer.innerHTML = `<canvas id="sensorChart"></canvas>`;
   const ctx = document.getElementById("sensorChart").getContext("2d");
 
@@ -101,7 +121,7 @@ function resetChart() {
   });
 }
 
-// Render live sensor data cards
+// Update variable cards
 function updateCards(values) {
   cardsContainer.innerHTML = "";
   for (const [key, val] of Object.entries(values)) {
@@ -117,7 +137,7 @@ function updateCards(values) {
   }
 }
 
-// Units for common variables
+// Get unit based on variable
 function getUnit(key) {
   const units = {
     voltage: "V",
@@ -129,40 +149,29 @@ function getUnit(key) {
   return units[key] || "";
 }
 
-// Show timestamp after data received
+// Show loading spinner & waiting text
+function showWaitingStatus() {
+  updateStatus.innerHTML = `
+    <span class="spinner"></span>
+    <span class="status-text">Waiting for data...</span>
+  `;
+  updateStatus.style.display = "flex";
+}
+
+// Show last updated time
 function showLastUpdatedTime(timestamp) {
   const time = new Date(timestamp).toLocaleTimeString();
-  updateStatus.classList.remove("status-container");
+  updateStatus.style.display = "block";
   updateStatus.innerHTML = `Last updated: <strong>${time}</strong>`;
 }
 
-// Sensor switch logic
-sensorButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const selected = btn.textContent.trim().split(" ")[1];
-    if (selected === currentSensor) return;
-
-    currentSensor = selected;
-    sensorTitle.textContent = `Sensor ${selected}`;
-    highlightSelectedSensor();
-    resetChart();
-
-    // Reset status spinner
-    updateStatus.innerHTML = `
-      <span class="spinner"></span>
-      <span class="status-text">Waiting for data...</span>
-    `;
-    updateStatus.style.display = "flex";
-  });
-});
-
-// WebSocket message handler
+// WebSocket receive data
 socket.addEventListener("message", event => {
   const msg = JSON.parse(event.data);
   if (msg.sensor !== currentSensor) return;
 
-  const timestamp = new Date(msg.timestamp).toLocaleTimeString();
-  if (!chartLabels.includes(timestamp)) chartLabels.push(timestamp);
+  const timeLabel = new Date(msg.timestamp).toLocaleTimeString();
+  if (!chartLabels.includes(timeLabel)) chartLabels.push(timeLabel);
 
   for (const [key, value] of Object.entries(msg.values)) {
     if (!chartData[key]) {
@@ -193,10 +202,5 @@ window.addEventListener("DOMContentLoaded", () => {
   sensorTitle.textContent = "Sensor A";
   highlightSelectedSensor();
   resetChart();
-
-  updateStatus.innerHTML = `
-    <span class="spinner"></span>
-    <span class="status-text">Waiting for data...</span>
-  `;
-  updateStatus.style.display = "flex";
+  showWaitingStatus();
 });
