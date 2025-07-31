@@ -12,7 +12,7 @@ document.querySelectorAll(".mobile-menu a, .mobile-menu .sensor-btn").forEach(it
   });
 });
 
-const socket = new WebSocket("ws://" + window.location.host);
+const socket = new WebSocket(`wss://${window.location.host}`);
 let currentSensor = "A";
 let chart;
 let chartData = {};
